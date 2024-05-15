@@ -204,7 +204,7 @@ module UnovaForm
       # @param [String | NilClass] label
       # @param [Hash] attrs
       def render_field_using_attrs(label, attrs)
-        return select_field label, multiple: multiple?, **attrs if attrs[:options].present? && %i[select checkboxes].include?(attrs[:type])
+        return select_field label, multiple: multiple?, **attrs if attrs[:options].is_a?(Array) && %i[select checkboxes].include?(attrs[:type])
 
         options = attrs.delete(:options)
 
