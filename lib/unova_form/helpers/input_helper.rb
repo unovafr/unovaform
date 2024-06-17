@@ -148,11 +148,17 @@ module UnovaForm
           data: { action: "click->number-field#sub" }
         ) if with_controls && type == :number
 
+        value = case type
+          when :textarea then nil
+          when :'datetime-local' then value&.strftime("%Y-%m-%dT%H:%M")
+          else value
+        end
+        
         els << content_tag(
           type == :textarea ? :textarea : :input,
           (value if type == :textarea),
           type:,
-          value: (value unless type == :textarea),
+          value:,
           placeholder:,
           required:,
           id:,
