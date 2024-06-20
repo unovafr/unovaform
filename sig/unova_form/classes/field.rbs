@@ -9,11 +9,20 @@ module UnovaForm
       attr_reader use_type_validators: bool
       attr_reader required: bool
       attr_reader required_if_persisted: bool
-      attr_reader options: (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^(String value) -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])?
+      attr_reader options: (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^(String value, Object parent) -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])?
       attr_reader multiple: bool
-      attr_reader autocomplete: (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^() -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])?
+      attr_reader additional_options: Hash[Symbol, Hash[Symbol, String]]
 
-      def initialize: (singleton(FieldTypes::Base) field_type, Hash[Symbol, Object]? validators, bool has_confirmation, bool use_type_validators, bool required, bool required_if_persisted, (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^(String value) -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])? options, bool multiple, (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^() -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])? autocomplete) -> void
+      def initialize: (
+          singleton(FieldTypes::Base) | Symbol | String field_type,
+          Hash[Symbol, Object]? validators, bool has_confirmation,
+          bool use_type_validators,
+          bool required,
+          bool required_if_persisted,
+          (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^(Object value, Object parent) -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])? options,
+          bool multiple,
+          **Hash[Symbol, Hash[Symbol, String]] additional_options
+        ) -> void
 
       def all_validators: -> Hash[Symbol, Object]
 

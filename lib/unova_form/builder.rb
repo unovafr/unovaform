@@ -168,7 +168,8 @@ module UnovaForm
         required: current_required?,
         options: current_options,
         placeholder: current_human_name_for(:placeholders),
-        **options.except(:no_label, :label)
+        **parse_additional_options(current_field.additional_options),
+        **parse_additional_options(options.except(:no_label, :label))
       }
 
       label = nil
@@ -393,6 +394,26 @@ module UnovaForm
           end
         end
         nil
+      end
+
+      def parse_additional_options(additional_options)
+        groups = %w[container subcontainer label icon placeholder]
+        group_options={}
+        res = additional_options.map do |k, v|
+          group = groups.find { |g| k.to_s.start_with?("#{g}_") }
+          if group
+            group_options[group] ||= {}
+            group_options[group][k.to_s.gsub("#{group}_", "").to_sym] = v
+            nil
+          else
+            [k, v]
+          end
+        end.compact.to_h
+
+        group_options.symbolize_keys!
+        group_options.each { |_, v| v.symbolize_keys! }
+
+        res.merge(group_options)
       end
 
       # @return [FalseClass, TrueClass]

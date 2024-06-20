@@ -128,7 +128,7 @@ module UnovaForm
       # @option options [TrueClass, FalseClass] :disabled if option tag is disabled
       # @param [TrueClass, FalseClass] multiple transform selector into a multiselect
       # @return [void]
-      def field(method, field_type, validators: nil, use_type_validators: false, has_confirmation: false, required: true, required_if_persisted: true, options: nil, multiple: false)
+      def field(method, field_type, validators: nil, use_type_validators: false, has_confirmation: false, required: true, required_if_persisted: true, options: nil, multiple: false, **additional_options)
         forms[@current_form_context].fields[method] = UnovaForm::Classes::Field.new(
           field_type,
           validators,
@@ -138,6 +138,7 @@ module UnovaForm
           required_if_persisted,
           options,
           multiple,
+          **additional_options
         )
       end
 

@@ -29,12 +29,11 @@ module UnovaForm
       #
       # @param [String, NilClass] string string to be beautified
       # @return [String] beautified string
-      def beautify_string_attr(string) = string.gsub(/\s+/, " ").downcase
+      def beautify_string_attr(string) = string.gsub(/\s+/, " ").gsub(/[^\w\->#=]/, "")
 
-      # Used to transform array of strings like ["Hello   wOrld", "  foo"] into "hello world foo"
+      # Used to transform array of strings like ["Hello   wOrld", "  foo"] into "Hello wOrld foo"
       # from array for usefulness lower-cased and beautified to be more suitable for html attributes
-      def array_attr(array) = array
-                                .filter_map { |s| beautify_string_attr(s) if s.present? }.join(" ")
+      def array_attr(array) = array.flatten.filter_map { |s| beautify_string_attr(s.to_s) if s.present? }.join(" ")
 
       # Used to remove stimulus controller for input field type
       #
@@ -67,9 +66,9 @@ module UnovaForm
       # @param [Symbol, String, NilClass] id
       # @param [Symbol, String, NilClass] type
       # @param [ActionView::Helpers::TagHelper::TagBuilder , ActiveSupport::SafeBuffer , String, NilClass] error
-      # @param [String, NilClass] container_class
-      # @param [String, NilClass] label_class
-      # @param [String, NilClass] subcontainer_class
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] container_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] label_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] subcontainer_options
       # @param [Symbol, String, NilClass] controller
       # @param [TrueClass, FalseClass, NilClass] omit_subcontainer
       # @param [Array<Hash{Symbol => String, FalseClass, TrueClass}>] options
@@ -79,23 +78,27 @@ module UnovaForm
       # @option options [TrueClass, FalseClass] :selected if option tag is selected
       # @option options [TrueClass, FalseClass] :disabled if option tag is disabled
       # @return [ActionView::Helpers::TagHelper::TagBuilder, ActiveSupport::SafeBuffer]
-      def field_container(label, id: nil, type: nil, error: nil, container_class: nil, label_class: nil, subcontainer_class: nil, controller: nil, omit_subcontainer: false, options: nil, required: false)
+      def field_container(label, id: nil, type: nil, error: nil, container_options: {}, label_options: {}, subcontainer_options: {}, controller: nil, omit_subcontainer: false, options: nil, required: false)
         # @type [String, NilClass] data_controller
 
-        tag.div(
-            class: array_attr(["field", container_class]),
-            data: {
-              controller: data_controller_of(type, controller),
-              options: (options if type == :multiselect)
-            }
-          ) do
+        container_options[:class] = array_attr([container_options[:class], "field"])
+        container_options[:data] = {
+          **container_options[:data].to_h,
+          controller: array_attr([data_controller_of(type, controller), container_options[:data]&.[](:controller)]),
+          options: (options if type == :multiselect)
+        }
+
+        subcontainer_options[:class] = array_attr([subcontainer_options[:class], "field-subcontainer#{"-full" if type == :textarea}"])
+        
+        label_options[:for] = id
+        label_options[:required] = required
+        
+
+        tag.div(**container_options) do
           els = []
           els << tag.div(error, class: "error") if error
-          els << (omit_subcontainer ? yield : tag.div(
-            yield,
-            class: array_attr(["field-container#{"-full" if type == :textarea}", subcontainer_class]),
-          ))
-          els << tag.label(label, for: id, class: label_class, required:) if label.present?
+          els << (omit_subcontainer ? yield : tag.div( yield, **subcontainer_options))
+          els << tag.label(label, **label_options) if label.present?
 
           safe_join(els)
         end
@@ -111,10 +114,11 @@ module UnovaForm
       # @param [String, NilClass] placeholder
       # @param [ActionView::Helpers::TagHelper::TagBuilder , ActiveSupport::SafeBuffer, String, NilClass] icon
       # @param [TrueClass, FalseClass, NilClass] is_icon_left
-      # @param [String, NilClass] container_class
-      # @param [String, NilClass] input_class
-      # @param [String, NilClass] label_class
-      # @param [String, NilClass] icon_class
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] container_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] subcontainer_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] input_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] label_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] icon_options
       # @param [String] rows
       # @param [Symbol, String, NilClass] controller
       # @param [TrueClass, FalseClass] with_controls
@@ -124,7 +128,7 @@ module UnovaForm
       # @param [Numeric, NilClass] step
       # @param [String, NilClass] pattern
       # @return [ActionView::Helpers::TagHelper::TagBuilder, ActiveSupport::SafeBuffer]
-      def input_field(label, id: nil, type: :text, name: nil, error: nil, value: nil, required: nil, disabled: nil, placeholder: nil, icon: nil, is_icon_left: nil, container_class: nil, input_class: nil, label_class: nil, icon_class: nil, rows: "3", controller: nil, with_controls: false, controls_on_input: false, min: nil, max: nil, step: nil, pattern: nil, options: nil, **_options)
+      def input_field(label, id: nil, type: :text, name: nil, error: nil, value: nil, required: nil, disabled: nil, placeholder: nil, icon: nil, is_icon_left: nil, container_options: {}, subcontainer_options: {}, input_options: {}, label_options: {}, icon_options: {}, rows: "3", controller: nil, with_controls: false, controls_on_input: false, min: nil, max: nil, step: nil, pattern: nil, options: nil, **_options)
         id ||= random_id
 
         case type
@@ -153,6 +157,12 @@ module UnovaForm
           when :'datetime-local' then value&.strftime("%Y-%m-%dT%H:%M")
           else value
         end
+
+        input_options[:class] = array_attr([
+          input_options[:class],
+          ("with-controls#{"-on-input" if controls_on_input}" if with_controls),
+          ("with-icon#{"-left" if is_icon_left}" if icon.present?),
+        ])
         
         els << content_tag(
           type == :textarea ? :textarea : :input,
@@ -166,16 +176,12 @@ module UnovaForm
           list: options.present? ? id + "_list" : nil,
           rows: (rows if type == :textarea),
           name: name || id,
-          class: array_attr([
-                              input_class,
-                              ("with-controls#{"-on-input" if controls_on_input}" if with_controls),
-                              ("with-icon#{"-left" if is_icon_left}" if icon.present?)
-                            ]),
           title: (placeholder || name || id if label.nil?),
           pattern: pattern&.gsub("\"", "\\\"")&.gsub("\\", "\\\\")&.html_safe,
           step:,
           **minmax,
-          **_options
+          **_options,
+          **input_options
         )
 
         els << tag.button("+", type: :button,
@@ -183,10 +189,10 @@ module UnovaForm
           data: { action: "click->number-field#add" }
         ) if with_controls && type == :number
 
-        els << tag.div(icon,
-                       class: array_attr(["icon", icon_class, ("left" if is_icon_left)]),
-                       data: ({ action: "click->password-field#toggle" } if type == :password)
-        ) if icon.present? && !with_controls
+        icon_options[:class] = array_attr(["icon", ("left" if is_icon_left), icon_options[:class]])
+        icon_options[:data] = { action: "click->password-field#toggle", **icon_options[:data].to_h } if type == :password
+
+        els << tag.div(icon, **icon_options) if icon.present? && !with_controls
 
         if options.present?
           els << content_tag(:datalist,
@@ -195,7 +201,7 @@ module UnovaForm
           )
         end
 
-        field_container(label, id:, type:, error:, container_class:, label_class:, required:, controller:) { safe_join(els) }
+        field_container(label, id:, type:, error:, container_options:, subcontainer_options:, label_options:, required:, controller:) { safe_join(els) }
       end
 
       # @param [String, NilClass] label
@@ -209,10 +215,12 @@ module UnovaForm
       # @param [Array<Hash{Symbol => String, FalseClass, TrueClass}>] options
       # @param [ActionView::Helpers::TagHelper::TagBuilder , ActiveSupport::SafeBuffer, String, NilClass] icon
       # @param [TrueClass, FalseClass, NilClass] is_icon_left
-      # @param [String, NilClass] container_class
-      # @param [String, NilClass] input_class
-      # @param [String, NilClass] label_class
-      # @param [String, NilClass] icon_class
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] container_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] subcontainer_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] input_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] label_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] icon_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] placeholder_options
       # @param [Symbol, String, NilClass] controller
       # @param [FalseClass, TrueClass] multiple
       # @option options [String] :value value of option tag
@@ -220,7 +228,7 @@ module UnovaForm
       # @option options [TrueClass, FalseClass] :selected if option tag is selected
       # @option options [TrueClass, FalseClass] :disabled if option tag is disabled
       # @return [ActionView::Helpers::TagHelper::TagBuilder, ActiveSupport::SafeBuffer]
-      def select_field(label, id: nil, type: :select, name: nil, error: nil, value: nil, required: nil, disabled: nil, placeholder: "select", options: [], icon: nil, is_icon_left: nil, container_class: nil, input_class: nil, label_class: nil, icon_class: nil, controller: nil, multiple: false, **_options)
+      def select_field(label, id: nil, type: :select, name: nil, error: nil, value: nil, required: nil, disabled: nil, placeholder: "select", options: [], icon: nil, is_icon_left: nil, container_options: {}, subcontainer_options: {}, input_options: {}, label_options: {}, icon_options: {}, placeholder_options: {}, controller: nil, multiple: false, **_options)
         id ||= random_id
         options ||= []
         options.unshift({ value: "", label: placeholder, disabled: required || multiple, selected: value.blank? }) if placeholder.present? && placeholder != ""
@@ -231,8 +239,11 @@ module UnovaForm
 
         name += "[]" if multiple && name.present?
 
+
         select_el = case type
         when :select
+          input_options[:class] = array_attr([input_options[:class], ("with-icon#{"-left" if is_icon_left}" if icon.present?)])
+
           tag.select(
             safe_join(options.map { |o|
               o[:selected] ||= multiple ? value&.include?(o[:value]) : o[:value] == value
@@ -241,14 +252,11 @@ module UnovaForm
             id:,
             name: name || id,
             required:,
-            class: array_attr([
-                                input_class,
-                                ("with-icon#{"-left" if is_icon_left}" if icon.present?)
-                              ]),
             title: (placeholder || name || id if label.nil?),
             multiple:,
             disabled:,
-            **_options
+            **_options,
+            **input_options
           )
         when :checkboxes
           safe_join(options.reject { |o| o[:disabled] }.map do |o|
@@ -260,15 +268,16 @@ module UnovaForm
                 value: o[:value],
                 id: cid,
                 name: name || id,
-                class: input_class,
                 checked: o[:selected] || (multiple ? value&.include?(o[:value]) : o[:value] == value),
                 title: (placeholder || name || cid if o[:label].empty?),
                 disabled: o[:disabled] || disabled,
-                **_options
+                **_options,
+                **input_options
               ),
               tag.label(
                 o[:label],
-                for: cid
+                for: cid,
+                **placeholder_options
               )
             ]), class: "field-checkboxes-item")
           end)
@@ -279,10 +288,10 @@ module UnovaForm
         field_container(label, id:,
           type: multiple && type == :select ? :multiselect : :text,
           omit_subcontainer: multiple && type == :select,
-          error:, container_class:, label_class:, controller:, required:) do
-          safe_join([ select_el,
-                      (tag.div(icon, class: array_attr(["icon", icon_class, ("left" if is_icon_left)])) if type == :select)
-                    ])
+          error:, container_options:, subcontainer_options:, label_options:, controller:, required:) do
+          icon_options[:class] = array_attr(["icon", ("left" if is_icon_left), icon_options[:class]])
+
+          safe_join([ select_el, (tag.div(icon, **icon_options) if type == :select) ])
         end
       end
 
@@ -294,20 +303,22 @@ module UnovaForm
       # @param [Object, NilClass] value
       # @param [TrueClass, FalseClass, NilClass] required
       # @param [String, NilClass] placeholder
-      # @param [String, NilClass] container_class
-      # @param [String, NilClass] input_class
-      # @param [String, NilClass] label_class
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] container_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] subcontainer_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] input_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] label_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] placeholder_options
       # @param [Symbol, String, NilClass] controller
       # @param [TrueClass, FalseClass, NilClass] checked
       # @return [ActionView::Helpers::TagHelper::TagBuilder, ActiveSupport::SafeBuffer]
-      def boolean_field(label, id: nil, type: :checkbox, name: nil, error: nil, value: "true", required: nil, disabled: nil, placeholder: "accept", container_class: nil, input_class: nil, label_class: nil, controller: nil, checked: nil, **options)
+      def boolean_field(label, id: nil, type: :checkbox, name: nil, error: nil, value: "true", required: nil, disabled: nil, placeholder: "accept", container_options: {}, subcontainer_options: {}, input_options: {}, label_options: {}, placeholder_options: {}, controller: nil, checked: nil, **options)
         id ||= random_id
 
         unless [:checkbox].include?(type&.to_sym)
           raise "Boolean fields must have :checkbox types respectively provided by UnovaForm::FormTypes::Boolean"
         end
 
-        field_container(label, id: nil, type:, error:, container_class:, label_class:, controller:) do
+        field_container(label, id: nil, type:, error:, container_options:, subcontainer_options:, label_options:, controller:) do
           tag.div(
             safe_join([
               tag.input(
@@ -316,14 +327,14 @@ module UnovaForm
                 value:,
                 id:,
                 name: name || id,
-                class: input_class.to_s,
                 checked:,
                 title: (placeholder || name || id if label.nil?),
                 required:,
                 disabled:,
-                **options
+                **options,
+                **input_options
               ),
-              (tag.label(placeholder, for: id) if placeholder.present?)
+              (tag.label(placeholder, for: id, **placeholder_options) if placeholder.present?)
             ]),
             class: "field-checkboxes-item"
           )
@@ -348,14 +359,14 @@ module UnovaForm
       # @param [ActionView::Helpers::TagHelper::TagBuilder , ActiveSupport::SafeBuffer, String, NilClass] icon
       # @param [ActionView::Helpers::TagHelper::TagBuilder , ActiveSupport::SafeBuffer, String, NilClass] remove_icon
       # @param [String, NilClass] accept
-      # @param [String, NilClass] container_class
-      # @param [String, NilClass] input_class
-      # @param [String, NilClass] label_class
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] container_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] input_options
+      # @param [Hash{Symbol => String, NilClass, Hash{Symbol => String, NilClass}}] label_options
       # @param [Symbol, String, NilClass] controller
       # @param [Hash{Symbol => String}] data
       # @return [ActionView::Helpers::TagHelper::TagBuilder, ActiveSupport::SafeBuffer]
       # noinspection RailsI18nInspection
-      def file_field(label, id: "", value_type: :other, name: nil, error: nil, value: nil, value_url: nil, multiple: nil, required: nil, disabled: nil, icon: nil, remove_icon: nil, accept: nil, container_class: "large", input_class: nil, label_class: nil, controller: nil, data: {}, **options)
+      def file_field(label, id: "", value_type: :other, name: nil, error: nil, value: nil, value_url: nil, multiple: nil, required: nil, disabled: nil, icon: nil, remove_icon: nil, accept: nil, container_options: {}, input_options: {}, label_options: {}, controller: nil, data: {}, **options)
         id ||= random_id
 
         icon ||= FILE_FIELD_DEFAULT_ICON
@@ -365,7 +376,16 @@ module UnovaForm
 
         name += "[]" if multiple && name.present?
 
-        field_container(nil, id:, type: :file, error:, container_class:, label_class:, controller:, omit_subcontainer: true) do
+        field_container(nil, id:, type: :file, error:, container_options:, label_options:, controller:, omit_subcontainer: true) do
+
+          input_options[:class] = array_attr([input_options[:class], ("filled" if value&.present?)])
+          input_options[:data] = {
+            **input_options[:data].to_h,
+            action: array_attr(["change->file-field#change", input_options[:data]&.[](:action)]),
+            'direct-upload-url': (options[:direct_upload_url] || rails_direct_uploads_url if options[:direct_upload_url] != "none"),
+            'form-type': :other
+          }
+
           safe_join([
             content_tag(
               :input,
@@ -375,16 +395,11 @@ module UnovaForm
               id:,
               accept:,
               name: name || id,
-              class: array_attr([input_class, ("filled" if value&.present?)]),
               aria_hidden: true,
               multiple:,
-              data: {
-                action: "change->file-field#change",
-                'direct-upload-url': (options[:direct_upload_url] || rails_direct_uploads_url if options[:direct_upload_url] != "none"),
-                'form-type': :other
-              }.merge(data){ |key, old, new| key == "action" ? "#{old} #{new}" : new },
               disabled:,
-              **options
+              **options,
+              **input_options
             ),
             (
               content_tag :label, for: id, class: label_class.to_s do
