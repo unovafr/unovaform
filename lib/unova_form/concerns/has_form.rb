@@ -115,7 +115,7 @@ module UnovaForm
       # Used to declare field in #form with given validations or options
       #
       # @param [Symbol] method
-      # @param [Class<UnovaForm::FieldTypes::Base>] field_type field type that will be used to determine type validators and field tag type
+      # @param [Class<UnovaForm::FieldTypes::Base>, Symbol, String] field_type field type that will be used to determine type validators and field tag type
       # @param [Hash{Symbol => Object}, NilClass] validators validators hash that will be given to a #validates method
       # @param [TrueClass, FalseClass] use_type_validators will add a <field_name>_confirmation field validation, you must add the field yourself
       # @param [TrueClass, FalseClass] has_confirmation define if field will use validators defined in #type, can be override by elements in #validators

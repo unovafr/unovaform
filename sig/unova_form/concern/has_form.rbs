@@ -14,16 +14,16 @@ module UnovaForm
 
       def field: (
         Symbol validation_context,
-        singleton(UnovaForm::FieldTypes::Base) field_type,
-          validators: Hash[Symbol, Object]?,
-          use_type_validators: bool,
-          has_confirmation: bool,
-          required: bool,
-          required_if_persisted: bool,
-          options: (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^(String value, Object parent) -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])?,
-          multiple: bool,
-          **Hash[Symbol, Object] additional_options
-        ) -> void
+        singleton(UnovaForm::FieldTypes::Base) | Symbol | String field_type,
+        validators: Hash[Symbol, Object]?,
+        use_type_validators: bool,
+        has_confirmation: bool,
+        required: bool,
+        required_if_persisted: bool,
+        options: (Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }] | ^(String value, Object parent) -> Array[Hash[Symbol, String | bool?] & { label: String, value: String, disabled: bool?, selected: bool? }])?,
+        multiple: bool,
+        **Hash[Symbol, Object] additional_options
+      ) -> void
 
       private
         def deep_freeze: (Object) -> Object
