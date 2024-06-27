@@ -400,10 +400,11 @@ module UnovaForm
         groups = %w[container subcontainer label icon placeholder]
         group_options={}
         res = additional_options.map do |k, v|
-          group = groups.find { |g| k.to_s.start_with?("#{g}_") }
+          group = groups.find { |g| k.to_s.start_with?("#{g}_") || k.to_s == g }
           if group
-            group_options[group] ||= {}
-            group_options[group][k.to_s.gsub("#{group}_", "").to_sym] = v
+            group_options[:"#{group}_options"] ||= {}
+            group_options[:"#{group}_options"][k.to_s.gsub("#{group}_", "").to_sym] = v if v.is_a?(String)
+            group_options[:"#{group}_options"].merge!(v) if v.is_a?(Hash)
             nil
           else
             [k, v]
