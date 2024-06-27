@@ -10,7 +10,7 @@ module UnovaForm
   class Builder < ActionView::Helpers::FormBuilder
     # ```javascript
     # let s = this;
-    # if(s.dataset.patternMessages)
+    # if(s.dataset.patternMessages && s.value)
     #   for (let [r, m] of Object.entries(JSON.parse(s.dataset.patternMessages))) {
     #     if (!new RegExp(
     #       // convert all HTML entities to characters
@@ -24,8 +24,12 @@ module UnovaForm
     #   }
     # ```
     # JS in variable is minified version of above code.
-    AUTOVALIDATE_JS_STRING = <<~JS
-      let s=this;if(s.dataset.patternMessages)for(let[e,t]of Object.entries(JSON.parse(s.dataset.patternMessages))){if(!new RegExp(Object.assign(document.createElement("textarea"),{innerHTML:e}).value).test(s.value)){s.setCustomValidity(t);break}s.setCustomValidity("")}
+    AUTOVALIDATE_JS_STRING = <<~JS.gsub(/\n\s*/, "").strip.freeze
+      let s=this;
+      if(s.dataset.patternMessages && s.value){
+        const m = Object.entries(JSON.parse(s.dataset.patternMessages)).find(([r]) => !new RegExp(Object.assign(document.createElement('textarea'),{innerHTML:r}).value).test(s.value));
+        if(m){s.setCustomValidity(m[1])}else{s.setCustomValidity('')}
+      } else {s.setCustomValidity('')}
     JS
     delegate :content_tag, :tag, :safe_join, :rails_direct_uploads_url, :capture, :concat, to: :@template
 
