@@ -226,7 +226,7 @@ div.field > div.field-container > button.field-number-minus{
 div.field > div.field-container > button.field-number-plus{
   right: 0;
 }
-div.field[data-controller="number-field"] > div.field-container{
+div.field[data-controller~="number-field"] > div.field-container{
   flex-direction: row;
   gap: 0.5rem;
 }
@@ -349,30 +349,30 @@ div.field > div.field-container > div.field-checkboxes-item > input[type="radio"
   so we hide it and use a custom multiselect instead, wo will be generated
   using js controller provided by unova_form gem.
 */
-div.field[data-controller="multiselect"]{
+div.field[data-controller~="multiselect"]{
   position: relative;
 }
-div.field[data-controller="multiselect"] > select[multiple]{
+div.field[data-controller~="multiselect"] > select[multiple]{
   opacity: 0;
   pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
 }
-div.field[data-controller="multiselect"] > label{
+div.field[data-controller~="multiselect"] > label{
   display: block;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container {
+div.field[data-controller~="multiselect"] > div.multiselect-container {
   order: 1;
   position: relative;
   background: var(--input-background-color);
   border: var(--input-border-width) solid var(--input-border-color);
   border-radius: var(--input-border-radius);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container.active{
+div.field[data-controller~="multiselect"] > div.multiselect-container.active{
   border-color: var(--input-focus-border-color);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown{
   max-height: 20vh;
   background: inherit;
   border-radius: inherit;
@@ -387,17 +387,17 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.multi
   z-index: 10;
   box-shadow: 0 .25rem 0.5rem rgba(0,0,0,0.2);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown *{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown *{
   pointer-events: none;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show{
   opacity: 1;
   pointer-events: auto;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show *{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show *{
   pointer-events: auto;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown button{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown button{
   display: block;
   width: 100%;
   text-align: left;
@@ -413,16 +413,16 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.multi
   transition: filter 0.2s;
   cursor: pointer;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown button:hover{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown button:hover{
   filter: brightness(0.9);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > span{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > span{
   color: var(--input-placeholder-color);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > span.hidden{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > span.hidden{
   display: none;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container{
   display: flex;
   flex-wrap: wrap;
   gap: var(--label-input-error-gap);
@@ -430,7 +430,7 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.multi
   align-items: center;
   font-family: var(--input-font-family);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element{
   display: flex;
   align-items: center;
   gap: var(--label-input-error-gap);
@@ -439,7 +439,7 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.multi
   padding: .125rem .25rem;
   filter: brightness(.9);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -453,13 +453,13 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.multi
   cursor: pointer;
   transform: scale(.8);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn:hover{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn:hover{
   filter: brightness(0.7);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container{
   display: flex;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container > input{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container > input{
   border: none;
   background: inherit;
   color: var(--input-color);
@@ -475,10 +475,10 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.input
   transition: height 0.2s, padding 0.2s;
   outline: none;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container > input::placeholder{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container > input::placeholder{
   color: var(--input-placeholder-color);
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container > input.show{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container > input.show{
   height: 2rem;
   padding: var(--input-padding);
 }
@@ -492,45 +492,45 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.input
 
   all js is provided by unova_form gem, on file_field_controller.js
 */
-div.field[data-controller="file-field"]{
+div.field[data-controller~="file-field"]{
   position: relative;
 }
-div.field[data-controller="file-field"] > input[type="file"]{
+div.field[data-controller~="file-field"] > input[type="file"]{
   opacity: 0;
   height: 1px;
 }
-div.field[data-controller="file-field"] > label{
+div.field[data-controller~="file-field"] > label{
   display: flex;
   flex-direction: column;
   gap: var(--label-input-error-gap);
   cursor: pointer;
   font-weight: bold;
 }
-div.field[data-controller="file-field"] > label > span.label{
+div.field[data-controller~="file-field"] > label > span.label{
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-div.field[data-controller="file-field"] > label > span.label > span:last-child{
+div.field[data-controller~="file-field"] > label > span.label > span:last-child{
   display: none;
   text-decoration: underline;
 }
-div.field[data-controller="file-field"] > label > div.preview-container{
+div.field[data-controller~="file-field"] > label > div.preview-container{
   background: var(--input-background-color);
   position: relative;
   border: var(--input-border-width) solid var(--input-border-color);
   border-radius: var(--input-border-radius);
 }
-div.field[data-controller="file-field"] > label > div.preview-container:not(.no-preview).multiple{
+div.field[data-controller~="file-field"] > label > div.preview-container:not(.no-preview).multiple{
   margin: 0 2rem;
 }
-div.field[data-controller="file-field"] > label > div.preview-container:not(.no-preview){
+div.field[data-controller~="file-field"] > label > div.preview-container:not(.no-preview){
   height: 6rem;
 }
-div.field[data-controller="file-field"] > label > div.preview-container.no-preview{
+div.field[data-controller~="file-field"] > label > div.preview-container.no-preview{
   width: 100%;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button:not(.next):not(.prev){
+div.field[data-controller~="file-field"] > label > div.preview-container > button:not(.next):not(.prev){
   position: absolute;
   top: 0;
   right: 0;
@@ -547,10 +547,10 @@ div.field[data-controller="file-field"] > label > div.preview-container > button
   display: none;
   color: var(--input-color);
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button:not(.next):not(.prev):hover{
+div.field[data-controller~="file-field"] > label > div.preview-container > button:not(.next):not(.prev):hover{
   filter: brightness(.8);
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview-placeholder{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview-placeholder{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -564,19 +564,19 @@ div.field[data-controller="file-field"] > label > div.preview-container > div.pr
   padding: var(--input-padding);
   box-sizing: border-box;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview-placeholder > i,
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview-placeholder > svg{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview-placeholder > i,
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview-placeholder > svg{
   font-size: 2rem;
   width: 2rem;
 }
-div.field[data-controller="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > i,
-div.field[data-controller="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > svg{
+div.field[data-controller~="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > i,
+div.field[data-controller~="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > svg{
   font-size: 1.25em;
   width: 1.25em;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > video.preview,
-div.field[data-controller="file-field"] > label > div.preview-container > img.preview,
-div.field[data-controller="file-field"] > label > div.preview-container > audio.preview{
+div.field[data-controller~="file-field"] > label > div.preview-container > video.preview,
+div.field[data-controller~="file-field"] > label > div.preview-container > img.preview,
+div.field[data-controller~="file-field"] > label > div.preview-container > audio.preview{
   width: 100%;
   height: 100%;
   position: absolute;
@@ -588,12 +588,12 @@ div.field[data-controller="file-field"] > label > div.preview-container > audio.
   background: var(--input-background-color);
   cursor: auto;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > video.preview[src=""],
-div.field[data-controller="file-field"] > label > div.preview-container > img.preview[src=""],
-div.field[data-controller="file-field"] > label > div.preview-container > audio.preview[src=""]{
+div.field[data-controller~="file-field"] > label > div.preview-container > video.preview[src=""],
+div.field[data-controller~="file-field"] > label > div.preview-container > img.preview[src=""],
+div.field[data-controller~="file-field"] > label > div.preview-container > audio.preview[src=""]{
   display: none;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview{
   width: 100%;
   height: 100%;
   position: absolute;
@@ -610,10 +610,10 @@ div.field[data-controller="file-field"] > label > div.preview-container > div.pr
   text-overflow: ellipsis;
   padding: var(--input-padding);
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview:empty{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview:empty{
   display: none;
 }
-div.field[data-controller="file-field"] > label > div.preview-container + div.filename{
+div.field[data-controller~="file-field"] > label > div.preview-container + div.filename{
   text-decoration: underline;
   font-weight: bold;
   font-size: var(--input-font-size);
@@ -624,8 +624,8 @@ div.field[data-controller="file-field"] > label > div.preview-container + div.fi
   text-overflow: ellipsis;
   width: 100%;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.next,
-div.field[data-controller="file-field"] > label > div.preview-container > button.prev{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.next,
+div.field[data-controller~="file-field"] > label > div.preview-container > button.prev{
   position: absolute;
   top: 0;
   bottom: 0;
@@ -634,33 +634,33 @@ div.field[data-controller="file-field"] > label > div.preview-container > button
   align-items: center;
   justify-content: center;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.next{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.next{
   right: 0;
   transform: translateX(100%);
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.next::before{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.next::before{
   content: ">";
   transform: scaleY(1.1);
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.prev{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.prev{
   left: 0;
   transform: translateX(-100%);
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.prev::before{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.prev::before{
   content: "<";
   transform: scaleY(1.1);
 }
-div.field[data-controller="file-field"] > input[type="file"]:placeholder-shown + label > span.label > span:last-child,
-div.field[data-controller="file-field"] > input[type="file"].filled + label > span.label > span:last-child{
+div.field[data-controller~="file-field"] > input[type="file"]:placeholder-shown + label > span.label > span:last-child,
+div.field[data-controller~="file-field"] > input[type="file"].filled + label > span.label > span:last-child{
   display: block;
 }
-div.field[data-controller="file-field"] > input[type="file"]:placeholder-shown + label > div.preview-container > button,
-div.field[data-controller="file-field"] > input[type="file"].filled + label > div.preview-container > button{
+div.field[data-controller~="file-field"] > input[type="file"]:placeholder-shown + label > div.preview-container > button,
+div.field[data-controller~="file-field"] > input[type="file"].filled + label > div.preview-container > button{
   display: flex;
 }
-div.field[data-controller="file-field"].large > label > div.preview-container:not(.no-preview){
+div.field[data-controller~="file-field"].large > label > div.preview-container:not(.no-preview){
   height: 9rem;
 }
-div.field[data-controller="file-field"].xlarge > label > div.preview-container:not(.no-preview){
+div.field[data-controller~="file-field"].xlarge > label > div.preview-container:not(.no-preview){
   height: 12rem;
 }

@@ -148,7 +148,7 @@ div.field > div.field-container > button.field-number-minus{
 div.field > div.field-container > button.field-number-plus{
   @apply right-0;
 }
-div.field[data-controller="number-field"] > div.field-container{
+div.field[data-controller~="number-field"] > div.field-container{
   @apply flex-row gap-2;
 }
 
@@ -238,64 +238,64 @@ div.field > div.field-container > div.field-checkboxes-item > input[type="radio"
   so we hide it and use a custom multiselect instead, wo will be generated
   using js controller provided by unova_form gem.
 */
-div.field[data-controller="multiselect"]{
+div.field[data-controller~="multiselect"]{
   @apply relative;
 }
-div.field[data-controller="multiselect"] > select[multiple]{
+div.field[data-controller~="multiselect"] > select[multiple]{
   @apply opacity-0 pointer-events-none absolute top-0 left-0;
 }
-div.field[data-controller="multiselect"] > label{
+div.field[data-controller~="multiselect"] > label{
   @apply block;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container {
+div.field[data-controller~="multiselect"] > div.multiselect-container {
   @apply order-2 relative <%= @theme[:input_background_color] %> <%= @theme[:input_border_color] %> <%= @theme[:input_border_width] %> <%= @theme[:input_border_radius] %>;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container.active{
+div.field[data-controller~="multiselect"] > div.multiselect-container.active{
   @apply <%= @theme[:input_focus_border_color].gsub("focus:", "") %>;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown{
   @apply max-h-[20vh] <%= @theme[:input_background_color] %> <%= @theme[:input_border_radius] %> absolute left-0 right-0 overflow-y-auto opacity-0 pointer-events-none <%= @theme[:input_padding] %> z-10 shadow-md;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown *{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown *{
   @apply pointer-events-none;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show{
   @apply opacity-100 pointer-events-auto;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show *{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown.show *{
   @apply pointer-events-auto;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown button{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown button{
   @apply block w-full text-left <%= @theme[:input_padding] %> border-0 <%= @theme[:input_border_radius] %> <%= @theme[:input_background_color] %> <%= @theme[:input_color] %> <%= @theme[:input_font_size] %> <%= @theme[:input_font_weight] %> <%= @theme[:input_font_family] %> brightness-100 transition-all duration-200 cursor-pointer;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-dropdown button:hover{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-dropdown button:hover{
   @apply brightness-90;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > span{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > span{
   @apply <%= @theme[:input_placeholder_color] %>;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container{
   @apply flex flex-row flex-wrap <%= @theme[:label_input_error_gap] %> <%= @theme[:input_padding] %> items-center <%= @theme[:label_font_family] %>;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element{
   @apply flex flex-row items-center <%= @theme[:label_input_error_gap] %> <%= @theme[:input_background_color] %> <%= @theme[:input_border_radius] %> brightness-90 px-1 py-0.5;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn{
   @apply pb-1 pt-0.5 px-2 flex items-center justify-center <%= @theme[:input_background_color] %> brightness-75 rounded-full border-0 aspect-1 transition-all duration-200 leading-none cursor-pointer scale-75;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn:hover{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.multiselect-selected-element-container > div.multiselect-selected-element button.multiselect-unselect-btn:hover{
   @apply brightness-50;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container{
   @apply flex;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container > input{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container > input{
   @apply border-0 <%= @theme[:input_padding] %> <%= @theme[:input_background_color] %> <%= @theme[:input_color] %> <%= @theme[:input_font_size] %> <%= @theme[:input_font_weight] %> <%= @theme[:input_font_family] %> w-full py-0 box-border outline-none h-0 transition-all duration-200;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container > input::placeholder{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container > input::placeholder{
   @apply <%= @theme[:input_placeholder_color] %>;
 }
-div.field[data-controller="multiselect"] > div.multiselect-container > div.input-container > input.show{
+div.field[data-controller~="multiselect"] > div.multiselect-container > div.input-container > input.show{
   @apply h-10 <%= @theme[:input_padding] %>;
 }
 
@@ -308,100 +308,100 @@ div.field[data-controller="multiselect"] > div.multiselect-container > div.input
 
   all js is provided by unova_form gem, on file_field_controller.js
 */
-div.field[data-controller="file-field"]{
+div.field[data-controller~="file-field"]{
   @apply relative;
 }
-div.field[data-controller="file-field"] > input[type="file"]{
+div.field[data-controller~="file-field"] > input[type="file"]{
   @apply opacity-0 h-px;
 }
-div.field[data-controller="file-field"] > label{
+div.field[data-controller~="file-field"] > label{
   @apply flex flex-col <%= @theme[:label_input_error_gap] %> cursor-pointer font-bold;
 }
-div.field[data-controller="file-field"] > label > span.label{
+div.field[data-controller~="file-field"] > label > span.label{
   @apply flex justify-between items-center;
 }
-div.field[data-controller="file-field"] > label > span.label > span:last-child{
+div.field[data-controller~="file-field"] > label > span.label > span:last-child{
   @apply hidden underline;
 }
-div.field[data-controller="file-field"] > label > div.preview-container{
+div.field[data-controller~="file-field"] > label > div.preview-container{
   @apply <%= @theme[:input_background_color] %> relative <%= @theme[:input_border_width] %> <%= @theme[:input_focus_border_color] %> <%= @theme[:input_border_radius] %>;
 }
-div.field[data-controller="file-field"] > label > div.preview-container:not(.no-preview).multiple{
+div.field[data-controller~="file-field"] > label > div.preview-container:not(.no-preview).multiple{
   @apply mx-8;
 }
-div.field[data-controller="file-field"] > label > div.preview-container:not(.no-preview){
+div.field[data-controller~="file-field"] > label > div.preview-container:not(.no-preview){
   @apply h-24;
 }
-div.field[data-controller="file-field"] > label > div.preview-container.no-preview{
+div.field[data-controller~="file-field"] > label > div.preview-container.no-preview{
   @apply w-full;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button:not(.next):not(.prev){
+div.field[data-controller~="file-field"] > label > div.preview-container > button:not(.next):not(.prev){
   @apply absolute top-0 right-0 p-1 rounded-full aspect-1 bg-inherit leading-none w-6 scale-75 brightness-90 transition-all duration-200 border-0 hidden <%= @theme[:input_color] %>;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button:not(.next):not(.prev):hover{
+div.field[data-controller~="file-field"] > label > div.preview-container > button:not(.next):not(.prev):hover{
   @apply brightness-75;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview-placeholder{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview-placeholder{
   @apply flex items-center justify-center h-full w-full <%= @theme[:input_placeholder_color] %> <%= @theme[:input_font_size] %> <%= @theme[:input_font_weight] %> <%= @theme[:input_font_family] %> text-center <%= @theme[:input_padding] %> box-border;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview-placeholder > i,
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview-placeholder > svg{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview-placeholder > i,
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview-placeholder > svg{
   font-size: 2em;
   width: 2em;
 }
-div.field[data-controller="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > i,
-div.field[data-controller="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > svg{
+div.field[data-controller~="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > i,
+div.field[data-controller~="file-field"] > label > div.preview-container.no-preview > div.preview-placeholder > svg{
   font-size: 1.25em;
   width: 1.25em;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > video.preview,
-div.field[data-controller="file-field"] > label > div.preview-container > img.preview,
-div.field[data-controller="file-field"] > label > div.preview-container > audio.preview{
+div.field[data-controller~="file-field"] > label > div.preview-container > video.preview,
+div.field[data-controller~="file-field"] > label > div.preview-container > img.preview,
+div.field[data-controller~="file-field"] > label > div.preview-container > audio.preview{
   @apply w-full h-full absolute inset-0 block object-contain object-center <%= @theme[:input_border_radius] %> <%= @theme[:input_background_color] %> cursor-auto;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > video.preview[src=""],
-div.field[data-controller="file-field"] > label > div.preview-container > img.preview[src=""],
-div.field[data-controller="file-field"] > label > div.preview-container > audio.preview[src=""]{
+div.field[data-controller~="file-field"] > label > div.preview-container > video.preview[src=""],
+div.field[data-controller~="file-field"] > label > div.preview-container > img.preview[src=""],
+div.field[data-controller~="file-field"] > label > div.preview-container > audio.preview[src=""]{
   @apply hidden;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview{
   @apply w-full h-full absolute inset-0 flex items-center <%= @theme[:input_border_radius] %> <%= @theme[:input_background_color] %> <%= @theme[:input_padding] %> cursor-auto font-normal whitespace-nowrap overflow-hidden text-ellipsis;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > div.preview:empty{
+div.field[data-controller~="file-field"] > label > div.preview-container > div.preview:empty{
   @apply hidden;
 }
-div.field[data-controller="file-field"] > label > div.preview-container + div.filename{
+div.field[data-controller~="file-field"] > label > div.preview-container + div.filename{
   @apply underline font-bold <%= @theme[:input_font_size] %> <%= @theme[:input_font_family] %> <%= @theme[:input_color] %> font-normal whitespace-nowrap overflow-hidden text-ellipsis w-full;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.next,
-div.field[data-controller="file-field"] > label > div.preview-container > button.prev{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.next,
+div.field[data-controller~="file-field"] > label > div.preview-container > button.prev{
   @apply absolute inset-y-0 p-2 flex items-center justify-center;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.next{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.next{
   @apply right-0 translate-x-full;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.next::before{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.next::before{
   content: ">";
   @apply scale-y-110;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.prev{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.prev{
   @apply left-0 -translate-x-full;
 }
-div.field[data-controller="file-field"] > label > div.preview-container > button.prev::before{
+div.field[data-controller~="file-field"] > label > div.preview-container > button.prev::before{
   content: "<";
   @apply scale-y-110;
 }
-div.field[data-controller="file-field"] > input[type="file"]:placeholder-shown + label > span.label > span:last-child,
-div.field[data-controller="file-field"] > input[type="file"].filled + label > span.label > span:last-child{
+div.field[data-controller~="file-field"] > input[type="file"]:placeholder-shown + label > span.label > span:last-child,
+div.field[data-controller~="file-field"] > input[type="file"].filled + label > span.label > span:last-child{
   @apply block;
 }
-div.field[data-controller="file-field"] > input[type="file"]:placeholder-shown + label > div.preview-container > button,
-div.field[data-controller="file-field"] > input[type="file"].filled + label > div.preview-container > button{
+div.field[data-controller~="file-field"] > input[type="file"]:placeholder-shown + label > div.preview-container > button,
+div.field[data-controller~="file-field"] > input[type="file"].filled + label > div.preview-container > button{
   @apply flex;
 }
-div.field[data-controller="file-field"].large > label > div.preview-container:not(.no-preview){
+div.field[data-controller~="file-field"].large > label > div.preview-container:not(.no-preview){
   @apply h-36;
 }
-div.field[data-controller="file-field"].xlarge > label > div.preview-container:not(.no-preview){
+div.field[data-controller~="file-field"].xlarge > label > div.preview-container:not(.no-preview){
   @apply h-48;
 }

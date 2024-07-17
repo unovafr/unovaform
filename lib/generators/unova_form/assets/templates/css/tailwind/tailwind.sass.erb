@@ -128,7 +128,7 @@ div.field
         button.field-number-plus
           @apply right-0
 
-  &[data-controller="number-field"] > div.field-container
+  &[data-controller~="number-field"] > div.field-container
     @apply flex-row gap-2
 
   >
@@ -210,7 +210,7 @@ div.field
     this is the multiselect styling, vanilla multiselect is very ugly,
     so we hide it and use a custom multiselect instead, wo will be generated
     using js controller provided by unova_form gem.
-  &[data-controller="multiselect"]
+  &[data-controller~="multiselect"]
     @apply relative
 
     >
@@ -279,7 +279,7 @@ div.field
     to show preview of the selected file.
 
     all js is provided by unova_form gem, on file_field_controller.js
-  &[data-controller="file-field"]
+  &[data-controller~="file-field"]
     @apply relative
 
     >
