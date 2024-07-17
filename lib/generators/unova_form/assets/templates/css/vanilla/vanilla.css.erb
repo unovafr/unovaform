@@ -67,27 +67,27 @@
   div.field > div.error ~ input,
   div.field > div.error ~ select,
   div.field > div.error ~ textarea,
-  div.field > div.error ~ div.field-container > input,
-  div.field > div.error ~ div.field-container > select,
-  div.field > div.error ~ div.field-container > textarea {
+  div.field > div.error ~ div.field-subcontainer > input,
+  div.field > div.error ~ div.field-subcontainer > select,
+  div.field > div.error ~ div.field-subcontainer > textarea {
     border-color: red;
   }
   you can also alter label on actions made on input, using this rule:
   div.field > input:focus ~ label,
   div.field > select:focus ~ label,
   div.field > textarea:focus ~ label,
-  div.field > div.field-container:has(input:focus) > label,
-  div.field > div.field-container:has(select:focus) > label,
-  div.field > div.field-container:has(textarea:focus) > label{
+  div.field > div.field-subcontainer:has(input:focus) > label,
+  div.field > div.field-subcontainer:has(select:focus) > label,
+  div.field > div.field-subcontainer:has(textarea:focus) > label{
     color: blue;
   }
   Unfortunately, :has selector is not supported by all browsers yet,
   at the date of this comment, firefox, IE, Opera mini, UC browser,
   firefox for android, QQ browser, BaiDu browser and KaiOS browser
   don't support it, so if necessary, you can use javascript to add
-  a class to the field-container when input is focused for these browsers,
+  a class to the field-subcontainer when input is focused for these browsers,
   and add this selector to the rule above:
-  div.field > div.field-container.has-focus > label
+  div.field > div.field-subcontainer.has-focus > label
 */
 div.field{
   display: flex;
@@ -128,24 +128,24 @@ div.field > div.error{
 
 /*
   this is used to properly order the input, select, textarea and
-  field-container (who contains input in majority of cases)
+  field-subcontainer (who contains input in majority of cases)
 */
 div.field > input,
 div.field > select,
 div.field > textarea,
-div.field > div.field-container,
-div.field > div.field-container-full{
+div.field > div.field-subcontainer,
+div.field > div.field-subcontainer-full{
   order: 1;
 }
-div.field > div.field-container-full{
+div.field > div.field-subcontainer-full{
   flex: 1;
 }
 
 /*
   this is the input, select, textarea styling, with basic styling.
-  inputs are majoritary wrapped into a div.field-container, because when you use
+  inputs are majoritary wrapped into a div.field-subcontainer, because when you use
   options: {icon: tag.i nil, class: "my-icon-class" } to add an icon to the input,
-  the icon is placed inside this div.field-container, absolute positioned,
+  the icon is placed inside this div.field-subcontainer, absolute positioned,
   and the input is padded to avoid the icon overlapping the input text, this way
   allows the icon to always be correctly placed, regardless of the input type, or size.
 
@@ -154,9 +154,9 @@ div.field > div.field-container-full{
   div.field > input:focus ~ .icon,
   div.field > select:focus ~ .icon,
   div.field > textarea:focus ~ .icon,
-  div.field > div.field-container > input:focus ~ .icon,
-  div.field > div.field-container > select:focus ~ .icon,
-  div.field > div.field-container > textarea:focus ~ .icon{
+  div.field > div.field-subcontainer > input:focus ~ .icon,
+  div.field > div.field-subcontainer > select:focus ~ .icon,
+  div.field > div.field-subcontainer > textarea:focus ~ .icon{
     color: blue;
   }
 
@@ -166,9 +166,9 @@ div.field > div.field-container-full{
 div.field > input,
 div.field > select,
 div.field > textarea,
-div.field > div.field-container > input,
-div.field > div.field-container > select,
-div.field > div.field-container-full > textarea{
+div.field > div.field-subcontainer > input,
+div.field > div.field-subcontainer > select,
+div.field > div.field-subcontainer-full > textarea{
   border-color: var(--input-border-color);
   border-width: var(--input-border-width);
   border-radius: var(--input-border-radius);
@@ -184,18 +184,18 @@ div.field > div.field-container-full > textarea{
 div.field > input:focus,
 div.field > select:focus,
 div.field > textarea:focus,
-div.field > div.field-container > input:focus,
-div.field > div.field-container > select:focus,
-div.field > div.field-container-full > textarea:focus{
+div.field > div.field-subcontainer > input:focus,
+div.field > div.field-subcontainer > select:focus,
+div.field > div.field-subcontainer-full > textarea:focus{
   outline: none;
   border-color: var(--input-focus-border-color);
 }
 div.field > input[type="hidden"],
-div.field > div.field-container > input[type="hidden"]{
+div.field > div.field-subcontainer > input[type="hidden"]{
   display: none;
 }
 div.field > input[type="color"],
-div.field > div.field-container > input[type="color"]{
+div.field > div.field-subcontainer > input[type="color"]{
   padding: 0;
 }
 
@@ -203,30 +203,30 @@ div.field > div.field-container > input[type="color"]{
   this for the number input, when you use options on f.field: {type: :number},
   with {with_controls: true} and optionally {with_controls_on_input: true},
 */
-div.field > div.field-container > input.with-controls-on-input{
+div.field > div.field-subcontainer > input.with-controls-on-input{
   padding: 0 2rem;
 }
-div.field > div.field-container > button.field-number-minus,
-div.field > div.field-container > button.field-number-plus{
+div.field > div.field-subcontainer > button.field-number-minus,
+div.field > div.field-subcontainer > button.field-number-plus{
   padding: .75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
 }
-div.field > div.field-container > button.field-number-minus.on-input,
-div.field > div.field-container > button.field-number-plus.on-input{
+div.field > div.field-subcontainer > button.field-number-minus.on-input,
+div.field > div.field-subcontainer > button.field-number-plus.on-input{
   position: absolute;
   top: 0;
   bottom: 0;
 }
-div.field > div.field-container > button.field-number-minus{
+div.field > div.field-subcontainer > button.field-number-minus{
   left: 0;
 }
-div.field > div.field-container > button.field-number-plus{
+div.field > div.field-subcontainer > button.field-number-plus{
   right: 0;
 }
-div.field[data-controller~="number-field"] > div.field-container{
+div.field[data-controller~="number-field"] > div.field-subcontainer{
   flex-direction: row;
   gap: 0.5rem;
 }
@@ -238,9 +238,9 @@ div.field[data-controller~="number-field"] > div.field-container{
 div.field > input::placeholder,
 div.field > select::placeholder,
 div.field > textarea::placeholder,
-div.field > div.field-container > input::placeholder,
-div.field > div.field-container > select::placeholder,
-div.field > div.field-container-full > textarea::placeholder{
+div.field > div.field-subcontainer > input::placeholder,
+div.field > div.field-subcontainer > select::placeholder,
+div.field > div.field-subcontainer-full > textarea::placeholder{
   color: var(--input-placeholder-color);
 }
 
@@ -249,7 +249,7 @@ div.field > div.field-container-full > textarea::placeholder{
   with the same gap as main field container. position is relative, so the icon can be
   absolute positioned inside it.
 */
-div.field > div.field-container{
+div.field > div.field-subcontainer{
   position: relative;
   display: flex;
   flex-direction: column;
@@ -265,7 +265,7 @@ div.field > div.field-container{
   prefer to avoid changing this rule for unique changes, and use
   options: {icon_class: "my-icon-class" } instead
 */
-div.field > div.field-container > .icon{
+div.field > div.field-subcontainer > .icon{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -277,30 +277,30 @@ div.field > div.field-container > .icon{
   align-items: center;
   justify-content: center;
 }
-div.field > div.field-container > .icon.left{
+div.field > div.field-subcontainer > .icon.left{
   left: var(--icon-left-pos);
   right: unset;
 }
-div.field > div.field-container > textarea ~ .icon{
+div.field > div.field-subcontainer > textarea ~ .icon{
   top: 0;
   padding: var(--input-padding); /* small fix to align icon on top of textarea */
   padding-left: unset;
   padding-right: unset;
   transform: unset;
 }
-div.field > div.field-container > input.with-icon{
+div.field > div.field-subcontainer > input.with-icon{
   padding-right: var(--input-icon-right-padding);
 }
-div.field > div.field-container > input.with-icon-left{
+div.field > div.field-subcontainer > input.with-icon-left{
   padding-left: var(--input-icon-left-padding);
 }
 
 /*
-  for special fields like checkboxes/radios select, or boolean, field-container
+  for special fields like checkboxes/radios select, or boolean, field-subcontainer
   has one or many .field-checkboxes-item, these will align checkboxes/radios
   with their labels and add a gap between them.
 */
-div.field > div.field-container > div.field-checkboxes-item{
+div.field > div.field-subcontainer > div.field-checkboxes-item{
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -314,7 +314,7 @@ div.field > div.field-container > div.field-checkboxes-item{
   prefer to avoid changing this rule for unique changes, and use
   options: {input_class: "my-input-class" } instead
 */
-div.field > div.field-container > div.field-checkboxes-item > input[type="checkbox"]{
+div.field > div.field-subcontainer > div.field-checkboxes-item > input[type="checkbox"]{
   color: var(--checkbox-color);
   width: var(--checkbox-size);
   height: var(--checkbox-size);
@@ -332,7 +332,7 @@ div.field > div.field-container > div.field-checkboxes-item > input[type="checkb
   prefer to avoid changing this rule for unique changes, and use
   options: {input_class: "my-input-class" } instead
 */
-div.field > div.field-container > div.field-checkboxes-item > input[type="radio"]{
+div.field > div.field-subcontainer > div.field-checkboxes-item > input[type="radio"]{
   color: var(--radio-color);
   width: var(--radio-size);
   min-width: var(--radio-size);
