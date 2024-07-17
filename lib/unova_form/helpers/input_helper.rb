@@ -402,7 +402,7 @@ module UnovaForm
               **input_options
             ),
             (
-              content_tag :label, for: id, class: label_class.to_s do
+              content_tag :label, for: id, **label_options do
                 content_tag(:span, tag.span(label) + tag.span(I18n.t(:edit)), class: "label") +
                   (
                     content_tag :div, class: "preview-container#{" multiple" if multiple}#{" no-preview" unless previewable}" do
