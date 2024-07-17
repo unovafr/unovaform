@@ -29,7 +29,7 @@ module UnovaForm
       #
       # @param [String, NilClass] string string to be beautified
       # @return [String] beautified string
-      def beautify_string_attr(string) = string.gsub(/\s+/, " ").gsub(/[^\w\->#=]/, "")
+      def beautify_string_attr(string) = string.gsub(/\s+/, " ").gsub(/[^\w\->#= ]/, "")
 
       # Used to transform array of strings like ["Hello   wOrld", "  foo"] into "Hello wOrld foo"
       # from array for usefulness lower-cased and beautified to be more suitable for html attributes
