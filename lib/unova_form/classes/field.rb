@@ -45,7 +45,7 @@ module UnovaForm
       # @return [void]
       # @return [void]
       def initialize(field_type, validators, has_confirmation, use_type_validators, required, required_if_persisted, options, multiple, **additional_options)
-        @type = field_type <= UnovaForm::FieldTypes::Base ? field_type : "UnovaForm::FieldTypes::#{field_type.to_s.camelize}".constantize
+        @type = !(field_type.is_a?(Symbol) || field_type.is_a?(String)) && field_type <= UnovaForm::FieldTypes::Base ? field_type : "UnovaForm::FieldTypes::#{field_type.to_s.camelize}".constantize
         @validators = validators
         @has_confirmation = has_confirmation
         @use_type_validators = use_type_validators

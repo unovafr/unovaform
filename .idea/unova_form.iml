@@ -55,7 +55,8 @@
       </RakeTaskImpl>
     </option>
   </component>
-  <component name="RakeTasksCache-v2">
+  <component name="RakeTasksCache-v2" failedReloadsCounter="2">
+    <option name="failedReloadsCounter" value="2" />
     <option name="myRootTask">
       <RakeTaskImpl id="rake">
         <subtasks>
