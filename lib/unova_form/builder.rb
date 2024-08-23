@@ -367,7 +367,7 @@ module UnovaForm
       def current_errors
         return unless current_errors?
 
-        safe_join(Array(object.errors.delete(@current_method)&.inject { |acc, e| Array(acc) << "<br />" << e }))
+        safe_join(object.errors.delete(@current_method), tag.br)
       end
 
       # @return [TrueClass, FalseClass]
