@@ -172,8 +172,22 @@ module UnovaForm
         required: current_required?,
         options: current_options,
         placeholder: current_human_name_for(:placeholders),
-        **parse_additional_options(current_field.additional_options),
-        **parse_additional_options(options.except(:no_label, :label))
+        **parse_additional_options(current_field.additional_options).merge(
+          parse_additional_options(options.except(:no_label, :label))
+        ) do |k, v1, v2|
+          case v1
+            when Hash
+              v1.merge(v2) do |k1, v11, v22|
+                case v11
+                  when Hash then v11.merge(v22)
+                  when String, Array then array_attr([v11, v22])
+                  else v22
+                end
+              end
+            when String, Array then array_attr([v1, v2])
+            else v2
+          end
+        end,
       }
 
       label = nil
