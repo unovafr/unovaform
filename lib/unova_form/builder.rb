@@ -369,7 +369,7 @@ module UnovaForm
 
       # @return [String]
       def current_tag_id
-        "#{object_name.tr('[', '_').delete(']')}_#{@current_method}-#{(0...20).map { ('a'..'z').to_a[rand(26)] }.join}"
+        "#{object_name.to_s.tr('[', '_').delete(']')}_#{@current_method}-#{(0...20).map { ('a'..'z').to_a[rand(26)] }.join}"
       end
 
       # @return [Symbol]
