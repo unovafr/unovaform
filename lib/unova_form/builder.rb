@@ -162,7 +162,7 @@ module UnovaForm
       attrs = {
         id: current_tag_id,
         name: current_tag_name,
-        value: type == :time ? current_value&.strftime("%I:%M:%S") : current_value,
+        value: type == :time ? current_value&.strftime("%H:%M:%S") : current_value,
         type:,
         error: current_errors,
         required: current_required?,
