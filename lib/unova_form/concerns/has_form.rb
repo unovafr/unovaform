@@ -107,6 +107,10 @@ module UnovaForm
             join_nested.call(nesteds)
 
             out
+          rescue NoMethodError => e
+            raise e unless e.message.include?("form_format")
+            method, klass = /.+`(.+)'(?: for an instance of | for )(?:#<)?([^:]+)/.match(e.message).captures
+            raise StandardError, "Class #{klass} must extend UnovaForm::Concerns::HasForm to use form_format method, or be included in containing class's form_format"
           end
         end
 
