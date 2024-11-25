@@ -14,6 +14,7 @@ module UnovaForm
             model_name: self.class.model_name.param_key,
             target_url: nil,
             method: persisted? ? :patch : :post,
+            form_options: {},
             **options
           )
             all_validators = self.class.validators.select do |v|
@@ -33,6 +34,7 @@ module UnovaForm
             }
             out[:target_path] = target_url if target_url.present?
             out[:method] = method if target_url.present?
+            out[:form_options] = form_options
             out[:fields] = {}
 
             self.class.forms[form_name].fields.each do |field_name, field|
