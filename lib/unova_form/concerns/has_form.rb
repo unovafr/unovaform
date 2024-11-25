@@ -20,6 +20,9 @@ module UnovaForm
             out = {
               model_name:,
               form_name: form_name,
+              model_primary_key: self.class.primary_key,
+              model_primary_value: self.send(self.class.primary_key),
+              persisted: self.persisted?,
               fields: {},
             }
             self.class.forms[form_name].fields.each do |field_name, field|
@@ -76,25 +79,28 @@ module UnovaForm
             join_nested = -> (nested, form_name = :base, nesteds = []) {
               nested.each { join_nested.call(_1) } if nested.is_a?(Array)
               nested.each { join_nested.call(_1, _2) } if nested.is_a?(Hash)
-              if self.class.reflect_on_association(nested)
+              association = self.class.reflect_on_association(nested)
+              if association
                 model = self.send(nested)
-                _nesteds = nesteds
                 form_name = case form_name
                   when Symbol then form_name
                   when Array
-                    _nesteds = form_name
+                    nesteds = form_name
                     :base
                   when Hash
-                    _nesteds = form_name[:nesteds] || []
+                    nesteds = form_name[:nesteds] || []
                     (form_name[:form_name] || form_name[:validation_context] || :base).to_sym
                   else form_name.to_sym
                 end
-                out[:fields][:"#{nested}_attributes"] = model.form_format(
-                  form_name,
-                  nesteds: _nesteds,
-                  model_name: "#{model_name}[#{nested}_attributes]",
-                  **options.dig(:options_for, :"#{nested}_attributes").to_h
-                )
+                _options = options.dig(:options_for, :"#{nested}_attributes") || {}
+                if model.is_a?(ActiveRecord::Associations::CollectionProxy)
+                  model_name = "#{model_name}[#{nested}_attributes][]"
+                  out[:fields][:"#{nested}_attributes"] = model.map { _1.form_format(form_name, nesteds:,model_name:, **_options) }
+                  out[:fields][:"#{nested}_attributes"] << association.inverse_of.active_record.new.form_format(form_name, nesteds:,model_name:, **_options)
+                else
+                  model_name = "#{model_name}[#{nested}_attributes]"
+                  out[:fields][:"#{nested}_attributes"] = model.form_format(form_name, nesteds:,model_name:, **_options)
+                end
               end
             }
 
