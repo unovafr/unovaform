@@ -48,8 +48,8 @@ module UnovaForm
 
               f[:formats] = validators.select { |v| v.kind == :format }.map do |fv|
                 {
-                  with: fv.options[:with].inspect.sub('\\A', "^").sub('\\Z', "$").sub('\\z', "$"),
-                  without: fv.options[:without].inspect.sub('\\A', "^").sub('\\Z', "$").sub('\\z', "$"),
+                  with: fv.options[:with]&.inspect&.sub('\\A', "^")&.sub('\\Z', "$")&.sub('\\z', "$"),
+                  without: fv.options[:without]&.inspect&.sub('\\A', "^")&.sub('\\Z', "$")&.sub('\\z', "$"),
                   message: @b.send(:get_error_message, field_name, fv.options[:message]),
                 }
               end
