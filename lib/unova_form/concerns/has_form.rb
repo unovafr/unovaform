@@ -6,6 +6,104 @@ module UnovaForm
       # For this function to work properly, you need to include ActiveModel::Model
       # in your model +class+ before extending this concern.
       def self.extended(mod)
+
+        mod.class_eval do
+          def form_format(form_name = :base, nesteds: [], model_name: self.class.model_name.param_key, **options)
+            all_validators = self.class.validators.select do |v|
+              next false if v.options[:on] && !v.options[:on].include?(form_name)
+              next false if v.options[:if] && !instance_exec(&v.options[:if])
+              next false if v.options[:unless] && instance_exec(&v.options[:unless])
+              true
+            end
+            @b = UnovaForm::Builder.new(model_name, self, nil, {})
+            @b.send(:check_form, form_name)
+            out = {
+              model_name:,
+              form_name: form_name,
+              fields: {},
+            }
+            self.class.forms[form_name].fields.each do |field_name, field|
+              validators = all_validators.select { |v| v.attributes.include?(field_name) }
+              @b.instance_variable_set(:@current_method, field_name)
+              @b.send(:current_field=, field)
+              f = {
+                type: @b.send(:current_tag_type),
+                name: @b.send(:current_tag_name),
+                label: @b.send(:current_human_name_for),
+                placeholder: @b.send(:current_human_name_for, :placeholders),
+                value: @b.send(:current_tag_type) == :time ? @b.send(:current_value)&.strftime("%H:%M:%S") : @b.send(:current_value),
+                multiple: @b.send(:multiple?),
+                additional_options: {
+                  **@b.send(:parse_additional_options, @b.send(:current_field).additional_options).merge(
+                    **@b.send(:parse_additional_options, options.except(:options_for) || {}),
+                    **@b.send(:parse_additional_options, options.dig(:options_for, field_name) || {})
+                  ),
+                }
+              }
+
+              opts = @b.send(:current_options)
+              f[:options] = opts if opts.present?
+
+              f[:required] = validators.any? { |v| v.kind == :presence }
+
+              f[:formats] = validators.select { |v| v.kind == :format }.map do |fv|
+                {
+                  with: fv.options[:with].inspect.sub('\\A', "^").sub('\\Z', "$").sub('\\z', "$"),
+                  without: fv.options[:without].inspect.sub('\\A', "^").sub('\\Z', "$").sub('\\z', "$"),
+                  message: @b.send(:get_error_message, field_name, fv.options[:message]),
+                }
+              end
+
+              f[:min], f[:max] = validators.select { |v| v.kind == :length }
+                .map { |fv| [fv.options[:minimum] || fv.options[:is], fv.options[:maximum] || fv.options[:is]] }
+                .first if validators.any? { |v| v.kind == :length }
+
+              f[:min], f[:max], f[:step] = validators.select { |v| v.kind == :numericality }
+                .map do |fv|
+                in_step = f[:additional_options][:step]
+                step = fv.options[:only_integer] ? (in_step || 1).to_i : in_step || "any"
+                [
+                  fv.options[:greater_than_or_equal_to] || num[:equal_to] || fv.options[:greater_than].try(:+, step),
+                  fv.options[:less_than_or_equal_to] || num[:equal_to] || fv.options[:less_than].try(:-, step),
+                  step,
+                ]
+              end
+                .first if validators.any? { |v| v.kind == :numericality }
+
+              out[:fields][field_name] = f
+            end
+
+            join_nested = -> (nested, form_name = :base, nesteds = []) {
+              nested.each { join_nested.call(_1) } if nested.is_a?(Array)
+              nested.each { join_nested.call(_1, _2) } if nested.is_a?(Hash)
+              if self.class.reflect_on_association(nested)
+                model = self.send(nested)
+                _nesteds = nesteds
+                form_name = case form_name
+                  when Symbol then form_name
+                  when Array
+                    _nesteds = form_name
+                    :base
+                  when Hash
+                    _nesteds = form_name[:nesteds] || []
+                    (form_name[:form_name] || form_name[:validation_context] || :base).to_sym
+                  else form_name.to_sym
+                end
+                out[:fields][:"#{nested}_attributes"] = model.form_format(
+                  form_name,
+                  nesteds: _nesteds,
+                  model_name: "#{model_name}[#{nested}_attributes]",
+                  **options.dig(:options_for, :"#{nested}_attributes").to_h
+                )
+              end
+            }
+
+            join_nested.call(nesteds)
+
+            out
+          end
+        end
+
         return unless mod < ActiveModel::Model
 
         mod.class_eval do
@@ -57,7 +155,7 @@ module UnovaForm
             # If format validation is an array, then adds all validations manually
             if final_validators[:format].is_a?(Array)
               # @type [Hash] fv
-              final_validators[:format].each { |fv| validates method, format: fv.merge(allow_blank: true) }
+              final_validators[:format].each { |fv| validates method, format: fv.merge(allow_blank: true), on: final_validators[:on] }
               final_validators.delete(:format)
             elsif final_validators[:format].is_a?(Hash)
               final_validators[:format] = final_validators[:format].merge(allow_blank: true)
