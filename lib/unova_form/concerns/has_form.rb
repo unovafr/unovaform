@@ -31,7 +31,7 @@ module UnovaForm
               model_primary_value: self.send(self.class.primary_key),
               persisted: self.persisted?,
             }
-            out[:target_url] = target_url if target_url.present?
+            out[:target_path] = target_url if target_url.present?
             out[:method] = method if target_url.present?
             out[:fields] = {}
 
