@@ -8,7 +8,14 @@ module UnovaForm
       def self.extended(mod)
 
         mod.class_eval do
-          def form_format(form_name = :base, nesteds: [], model_name: self.class.model_name.param_key, **options)
+          def form_format(
+            form_name = :base,
+            nesteds: [],
+            model_name: self.class.model_name.param_key,
+            target_url: nil,
+            method: persisted? ? :patch : :post,
+            **options
+          )
             all_validators = self.class.validators.select do |v|
               next false if v.options[:on] && !v.options[:on].include?(form_name)
               next false if v.options[:if] && !instance_exec(&v.options[:if])
@@ -23,8 +30,11 @@ module UnovaForm
               model_primary_key: self.class.primary_key,
               model_primary_value: self.send(self.class.primary_key),
               persisted: self.persisted?,
-              fields: {},
             }
+            out[:target_url] = target_url if target_url.present?
+            out[:method] = method if target_url.present?
+            out[:fields] = {}
+
             self.class.forms[form_name].fields.each do |field_name, field|
               validators = all_validators.select { |v| v.attributes.include?(field_name) }
               @b.instance_variable_set(:@current_method, field_name)
