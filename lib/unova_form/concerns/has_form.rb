@@ -63,8 +63,8 @@ module UnovaForm
                 in_step = f[:additional_options][:step]
                 step = fv.options[:only_integer] ? (in_step || 1).to_i : in_step || "any"
                 [
-                  fv.options[:greater_than_or_equal_to] || num[:equal_to] || fv.options[:greater_than].try(:+, step),
-                  fv.options[:less_than_or_equal_to] || num[:equal_to] || fv.options[:less_than].try(:-, step),
+                  fv.options[:greater_than_or_equal_to] || fv.options[:equal_to] || fv.options[:greater_than].try(:+, step),
+                  fv.options[:less_than_or_equal_to] || fv.options[:equal_to] || fv.options[:less_than].try(:-, step),
                   step,
                 ]
               end
